@@ -1,0 +1,14 @@
+#compdef pje
+
+_pje () {
+  local state
+
+  _arguments \
+    '1: :->project'
+
+  case $state in
+    (project) _arguments "1:projects:($( echo $(cd ~/Projects/project-list/edit && ls -1 *.sh | sed "s/\.sh$//") ))"
+  esac 
+}
+
+_pje "$@"
