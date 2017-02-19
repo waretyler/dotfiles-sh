@@ -1,3 +1,18 @@
+# Phabricator
+easyarc_create() { 
+  TMPFILE1=$(mktemp); TMPFILE2=$(mktemp); svn status | grep "^[\A|\M|\D]" | awk '{print $2}' > $TMPFILE1; vim -c ":0r $TMPFILE1" $TMPFILE2 ; if [ -s "$TMPFILE2" ];then arc diff $1 --create $(cat $TMPFILE2 | tr '\n' ' ') %1; else echo "Vim not written out. Aborting commit."; rm -rf $TMPFILE1; rm -rf $TMPFILE2;fi ;
+}
+easyarc_update() { 
+  TMPFILE1=$(mktemp); TMPFILE2=$(mktemp); svn status | grep "^[\A|\M|\D]" | awk '{print $2}' > $TMPFILE1; vim -c ":0r $TMPFILE1" $TMPFILE2 ; if [ -s "$TMPFILE2" ];then arc diff --update $1 $2 $(cat $TMPFILE2 | tr '\n' ' '); else echo "Vim not written out. Aborting commit."; rm -rf $TMPFILE1; rm -rf $TMPFILE2;fi ;
+}
+download () {
+  cd ~/Downloads
+  curl -O "$@"
+  cd -
+}
+
+
+
 #-----------------------------------------------------------------------
 # helper functions
 #-----------------------------------------------------------------------

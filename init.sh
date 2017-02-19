@@ -1,5 +1,14 @@
 # source ~/.bash_profile
-export PZSH=~/Projects/configuration/zsh
+# resides.  Note that this resolves symlinks (HT Gerrit Imsieke). First check
+# if greadlink exists (Mac OS X) and if so, use that.
+
+if hash greadlink 2>/dev/null; then
+    READLINK=greadlink
+else
+    READLINK=readlink
+fi
+
+export PZSH="$(dirname "$( $READLINK -f ~/.zshrc )")"
 source $PZSH/environment.sh
 
 ZSH_THEME="avit"
@@ -12,6 +21,7 @@ compinit
 DISABLE_AUTO_TITLE="true"
 
 plugins=(git)
+plugins=($plugins svn)
 
 source $ZSH/oh-my-zsh.sh
 source $PZSH/aliases.sh
