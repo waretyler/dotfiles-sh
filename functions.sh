@@ -25,45 +25,6 @@ firstSub () {
   fi
 }
 
-commandInCurrent () {
-  osascript -e "tell application \"iTerm2\" 
-                  set mySession to (current session of current window)
-                  tell mySession 
-                    write text \"$1\"
-                  end tell
-                end tell"
-}
-
-commandInPane () {
-  local direction="vertically"
-  if (! [ -z "$2" ]) && [ $2 == "horizontal" ]; then
-    local direction="horizontally"  
-  fi
-
-  osascript -e "tell application \"iTerm2\" 
-                  set mySession to (current session of current window)
-                  tell mySession 
-                    set mySplit to (split $direction with default profile)
-                    tell mySplit
-                      write text \"$1\"
-                      $3
-                    end tell
-                  end tell
-                end tell"
-}
-
-commandInTab () {
-  osascript -e "tell application \"iTerm2\" 
-                  set myWindow to (current window)
-                  tell myWindow 
-                    set myTab to (create tab with default profile)
-                    tell current session of myTab 
-                      write text \"$1\"
-                    end tell
-                  end tell
-                end tell"
-}
-
 eCd() {
   # $1 is path 
   # $2 is name 
@@ -152,38 +113,8 @@ quickE epje $pjRoot/edit ''
 #-----------------------------------------------------------------------
 # misc
 #-----------------------------------------------------------------------
-wiki() {
-  open "http://en.wikipedia.org/wiki/Special:Search/${@}"
-}
-
-clip() {
-  cat $1 | pbcopy
-}
-
-nLink() {
-  npm link @idearoom/{config,render,math,server-{config,render}}
-}
-
-newtab() {
-  cliclick kd:cmd t:'t' ku:cmd
-}
-
 man () {
   /usr/bin/man $@ || (help $@ 2> /dev/null && help $@ | less)
-}
-
-vman() {
-  nvim -c "SuperMan $*"
-
-  if [ "$?" != "0" ]; then
-    echo "No manual entry for $*"
-  fi
-}
-
-oIssue () {
-  if ! test -z "$1"; then
-    open "https://sawtoothideas.unfuddle.com/a#/projects/9/tickets/by_number/$1?cycle=true"
-  fi
 }
 
 journal() {
@@ -193,7 +124,22 @@ journal() {
 # make functions that allow quick editing and completion of files
 quickE plan $life/plans '.md'
 quickE kl "$life/klist" '.md'
-quickE iv $life/improvement '.md'
+quickE n $life/improvement '.md'
 quickE esh $PZSH '.sh'
-quickE ebin ~/bin '.sh'
+quickE ebin ~/bin ''
 quickE lesson "$life/lesson" ".md" "normal Godts YpVr-vipgqo" "+star"
+
+ctagUpdate() {
+    ag -g '' . | xargs ctags -a
+}
+
+svnWrapper() {
+  if [[ "$1" == "diff" ]]; then
+    colorsvn $@ | colordiff
+  elif [[ "$1" == "up" ]] || [[ "$1" == "update" ]]; then
+    colorsvn $@ 
+    maketags
+  else
+    colorsvn $@ 
+  fi
+}

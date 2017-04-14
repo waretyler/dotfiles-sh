@@ -20,8 +20,12 @@ compinit
 # compdef vman="man"
 DISABLE_AUTO_TITLE="true"
 
-plugins=(git)
-plugins=($plugins svn)
+# took git out >.<
+plugins=(svn npm)
+
+
+export NVM_DIR="$HOME/.nvm"
+. "/usr/local/opt/nvm/nvm.sh"
 
 source $ZSH/oh-my-zsh.sh
 source $PZSH/aliases.sh
