@@ -20,4 +20,5 @@ alias ctags="ctags --sort=foldcase"
 
 export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 # alias maketags_cpp='GTAGSFORCECPP=1 $(maketags)'
+
 alias n="iv"
