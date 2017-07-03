@@ -13,6 +13,10 @@ alias git.root="cd \$(git rev-parse --show-toplevel)"
 alias git.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
 alias s?="search"
 
+
+alias cd.p='cd $p/$(cd $p/ && (find -L . -mindepth 1 -maxdepth 2 -type d -print | cut -b3- | fzf))' 
+
+
 # macos specfic
 if [ "$OS" = "macos" ]; then
   alias osReference="grep '^ *kVK' /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h|tr -d ,|while read x y z;do printf '%d %s %s\n' $z $z ${x#kVK_};done|sort -n"
