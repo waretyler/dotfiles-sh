@@ -1,20 +1,53 @@
-export ZSH=~/.oh-my-zsh
+export OS="$(~/bin/which-os)"
+export ZSH="${HOME}/.oh-my-zsh"
 
+# Location
 export docs=~/Documents
-export proj=~/Projects
-export dropbox=~/Dropbox
-export life=$dropbox/life
-export config=$proj/configuration
+export p=~/Projects
+export dbox=~/Dropbox
+export life=$dbox/life
+export org=$dbox/org
+export notes=$life/notes
+export config=$p/configuration
 
+# environment fun
 export EDITOR=/usr/local/bin/nvim
 export CLICOLOR=1
 
-PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-# PATH=$PATH:/Library/TeX/texbin
-PATH=$PATH:~/bin
-PATH=$PATH:$proj/go/bin
-export PATH=$PATH
+# gnu global tags
+export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 
-if [ -f $PZSH/environment.local.sh ]; then
-  source $PZSH/environment.local.sh
+if [ "${OS}" = 'macos' ]; then
+  # Homebrew
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
+  PATH="${HOMEBREW_PREFIX}/sbin:${PATH}"
+  PATH="${PATH}:/Applications/TeX/TeXShop.app/Contents/Resources/TeXShop/bin"
+  MANPATH="${HOMBREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
+
+  FDK_EXE="${HOME}/bin/FDK/Tools/osx"
+  SSH_ASKPASS="$HOMEBREW_PREFIX/bin/ssh-askpass"
+
+fi
+
+export FDK_EXE
+
+export NVM_DIR="${HOME}/.nvm"
+[ -s "${NVM_DIR}/nvm.sh" ] && . "${NVM_DIR}/nvm.sh" --no-use 
+
+export MANPATH
+
+# path
+PATH="${PATH}:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+# PATH=$PATH:/Library/TeX/texbin
+PATH="${PATH}:${HOME}/bin"
+PATH="${PATH}:${p}/go/bin"
+PATH="${PATH}:${FDX_EXE}"
+PATH="${PATH}:${NVM_BIN}"
+export PATH
+
+# Local Config
+if [ -f "${PZSH}/environment.local.sh" ]; then
+  source "$PZSH/environment.local.sh"
 fi

@@ -1,21 +1,30 @@
-# Phabricator
-easyarc_create() { 
-  TMPFILE1=$(mktemp); TMPFILE2=$(mktemp); svn status | grep "^[\A|\M|\D]" | awk '{print $2}' > $TMPFILE1; vim -c ":0r $TMPFILE1" $TMPFILE2 ; if [ -s "$TMPFILE2" ];then arc diff $1 --create $(cat $TMPFILE2 | tr '\n' ' ') %1; else echo "Vim not written out. Aborting commit."; rm -rf $TMPFILE1; rm -rf $TMPFILE2;fi ;
-}
-easyarc_update() { 
-  TMPFILE1=$(mktemp); TMPFILE2=$(mktemp); svn status | grep "^[\A|\M|\D]" | awk '{print $2}' > $TMPFILE1; vim -c ":0r $TMPFILE1" $TMPFILE2 ; if [ -s "$TMPFILE2" ];then arc diff --update $1 $2 $(cat $TMPFILE2 | tr '\n' ' '); else echo "Vim not written out. Aborting commit."; rm -rf $TMPFILE1; rm -rf $TMPFILE2;fi ;
-}
+#!/bin/bash 
+
 download () {
   cd ~/Downloads
   curl -O "$@"
   cd -
 }
 
+pre_search () {
+  if [ -z "$(echo $1 | sed 's/ //g')" ]; then
+    read "search?Search: " 
+    echo $search 
+  else
+    echo $@
+  fi
+}
 
+search () {
+  ARGS="$(pre_search $@)"
+  open "https://duckduckgo.com?q=${ARGS}"
+}
 
-#-----------------------------------------------------------------------
-# helper functions
-#-----------------------------------------------------------------------
+select_github_repositories () {
+  ARGS=$(pre_search $@)
+  curl -s -X GET "https://api.github.com/search/repositories?q=${ARGS}" | jq -r ".items[].full_name" | fzf -m
+}
+
 firstSub () {
   if ! test -z "$1"; then
     local dir=$(pwd | grep -F "$1" | sed "s|$1\([^/]*\).*|\1|")
@@ -54,14 +63,18 @@ dirComp() {
   }"
 }
 
-quickE() {
+quick() {
+  if [ "$2" != 'e' ]; then
+    body="file_path=\"$3/\$1$4\"; if [ ! -f \"\${file_path}\" ]; then; touch \"\${file_path}\"; fi; $2 \"\${file_path}\""
+  else
   # $1 function name, $2 root, $3 associated extension
-  eval "$1(){ eCd $2 "'"$1"'" \"$3\" \"$4\" \"$5\"}"
-  dirComp $1 $2 $3
+    body="eCd $3 "'"$1"'" \"$4\" \"$5\" \"$6\""
+  fi
+
+  eval "$1(){ ${body} }"
+  dirComp $1 $3 $4
 }
-#-----------------------------------------------------------------------
-# title
-#-----------------------------------------------------------------------
+
 termTitle () {
   # information about what is in the terminal tab 
   # Expand to some notion of process running?
@@ -78,41 +91,9 @@ termTitle () {
 
   echo -ne "\033]0;${title}\007"
 }
+
 precmd () { termTitle }
 
-#-----------------------------------------------------------------------
-# project management
-#-----------------------------------------------------------------------
-
-pjRoot=~/Projects/project-list
-pj() {
-  if ! test -z "$1"; then
-    # eval "$pjRoot/$1.sh"
-    source "$pjRoot/$1.sh"
-  fi
-}
-quickE epj $pjRoot '.sh'
-
-
-pjo() {
-  if ! test -z "$1"; then
-    open $(cat $pjRoot/links/$1) 
-  fi
-}
-quickE epjo $pjRoot/links ''
-
-pje() {
-  if ! test -z "$1"; then
-    # using eval to handle environment vars
-    eval "cd $(cat $pjRoot/edit/$1)"
-    e
-  fi
-}
-quickE epje $pjRoot/edit ''
-
-#-----------------------------------------------------------------------
-# misc
-#-----------------------------------------------------------------------
 man () {
   /usr/bin/man $@ || (help $@ 2> /dev/null && help $@ | less)
 }
@@ -122,16 +103,11 @@ journal() {
 }
 
 # make functions that allow quick editing and completion of files
-quickE plan $life/plans '.md'
-quickE kl "$life/klist" '.md'
-quickE n $life/improvement '.md'
-quickE esh $PZSH '.sh'
-quickE ebin ~/bin ''
-quickE lesson "$life/lesson" ".md" "normal Godts YpVr-vipgqo" "+star"
-
-ctagUpdate() {
-    ag -g '' . | xargs ctags -a
-}
+quick kl 'e' "$life/klist" '.md'
+quick n 'open' $life/notes '.org'
+quick esh 'e' $PZSH '.sh'
+quick ebin 'e' ~/bin ''
+quick lesson 'e' "$life/lesson" ".md" "normal Godts YpVr-vipgqo" "+star"
 
 svnWrapper() {
   if [[ "$1" == "diff" ]]; then
@@ -143,3 +119,22 @@ svnWrapper() {
     colorsvn $@ 
   fi
 }
+
+switchVimConfig() {
+    local NVIM_CONFIG_DIR=~/.config/nvim
+    rm $NVIM_CONFIG_DIR
+    ln -s $1 $NVIM_CONFIG_DIR
+}
+
+switchToSpaceVim() { switchVimConfig ~/.SpaceVim; }
+switchFromSpaceVim() { switchVimConfig ~/.config/nvim_back; }
+
+switchEmacsConfig() {
+    local EMACS_CONFIG_DIR=~/.emacs.d
+    rm $EMACS_CONFIG_DIR 
+
+    ln -s $1 $EMACS_CONFIG_DIR 
+}
+
+switchToSpacemacs() { switchEmacsConfig ~/.spacemacs.d }
+switchFromSpacemacs() { switchEmacsConfig ~/.emacs_back.d }
