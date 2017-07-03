@@ -10,6 +10,7 @@ alias less="less -r"
 
 alias patch.paste="pbpaste | patch -p0"
 alias git.root="cd \$(git rev-parse --show-toplevel)"
+alias git.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
 alias s?="search"
 
 # macos specfic
