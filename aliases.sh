@@ -8,6 +8,7 @@ alias less="less -r"
 
 alias patch.paste="pbpaste | patch -p0"
 
+
 alias ls.p='(cd $p && ls -1 -d **/.git | sed "s/\/.git//" )'
 alias cd.p='project_dir=$(ls.p | fzf) && cd "$p/$project_dir"' 
 
@@ -15,10 +16,14 @@ alias -g e="nvim"
 alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim -c "Denite buffer")'
 alias -g e.p='cd.p && ef'
 
+alias rmf="(fzf -m || exit 0) | rm -rf"
+
 alias git.root="cd \$(git rev-parse --show-toplevel)"
 alias git.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
 alias git.hclone='(github_repo=$(select_github_repositories || exit 2) && cd $p && git clone "https://github.com/${github_repo}")'
 alias git.ppull='(cd.p && git pull)'
+
+alias gco='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 
 alias s?="search"
 

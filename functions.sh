@@ -1,5 +1,3 @@
-#!/bin/bash 
-
 download () {
   cd ~/Downloads
   curl -O "$@"
@@ -22,7 +20,7 @@ search () {
 
 select_github_repositories () {
   ARGS=$(pre_search $@)
-  curl -s -X GET "https://api.github.com/search/repositories?q=${ARGS}" | jq -r ".items[].full_name" | fzf -m
+  curl -s -X GET "https://api.github.com/search/repositories?q=${ARGS}" | jq -r ".items[].full_name" | fzf 
 }
 
 firstSub () {
@@ -138,3 +136,8 @@ switchEmacsConfig() {
 
 switchToSpacemacs() { switchEmacsConfig ~/.spacemacs.d }
 switchFromSpacemacs() { switchEmacsConfig ~/.emacs_back.d }
+
+# Local Config
+if [ -f "${PZSH}/functions.local.sh" ]; then
+  source "$PZSH/functions.local.sh"
+fi
