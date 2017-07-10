@@ -13,14 +13,48 @@ pre_search () {
   fi
 }
 
+ls_fzf () {
+  if [[ -z "$1" ]] && [[ "$1" = "--" ]]; then
+    shift
+    bash -c "ls $@"
+  else
+    bash -c "ls $@ | fzf > /dev/null"
+  fi
+}
+
+ssh_to_tmux () {
+  local extra=''
+  if [[ "$3" = "--new" ]]; then
+    local extra='neww'
+  fi
+
+  ssh $1 -t "tmux new -s \"\$(whoami)\" \\; set -g status-bg $2 || tmux attach -t \"\$(whoami)\" \\; $extra "
+}
+
+ls_dir_match() {
+  local exclude=''
+  if [ ! -z "$2" ]; then
+    exclude="-not -path '*$2*'"
+  fi
+
+  local command="find . -type d -name $1 $exclude | sed \"s/[^/]*$//\""  
+  bash -c "$command"
+}
+
 search () {
   ARGS="$(pre_search $@)"
   open "https://duckduckgo.com?q=${ARGS}"
 }
 
+github_get_search() {
+  for i in $(seq 2); do
+    curl -s -X GET "https://api.github.com/search/repositories?page=${i}&per_page=100&q=$@" | jq -r '.items[].full_name'  
+  done
+}
+
 select_github_repositories () {
   ARGS=$(pre_search $@)
-  curl -s -X GET "https://api.github.com/search/repositories?q=${ARGS}" | jq -r ".items[].full_name" | fzf 
+  github_get_search $ARGS | fzf 
 }
 
 firstSub () {
