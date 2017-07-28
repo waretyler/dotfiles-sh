@@ -171,7 +171,58 @@ switchEmacsConfig() {
 switchToSpacemacs() { switchEmacsConfig ~/.spacemacs.d }
 switchFromSpacemacs() { switchEmacsConfig ~/.emacs_back.d }
 
+fzf-git-show() {
+  local out shas sha q k
+
+  if [[ -d .git ]] || git rev-parse --git-dir > /dev/null 2>&1; then
+    while out=$(
+        git log --graph --color=always \
+            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+        fzf --ansi --multi --no-sort --reverse --query="$q" \
+            --print-query \
+            --expect=ctrl-d,ctrl-l,ctrl-n \
+            --toggle-sort=\`); do
+
+      q=$(head -1 <<< "$out")
+      k=$(head -2 <<< "$out" | tail -1)
+      shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
+
+      [[ -z "$shas" ]] && continue
+
+      case "$k" in
+        ctrl-d)
+          git diff --color=always $shas | less -R;;
+        ctrl-l)
+          git log -p --color=always ${shas}.. | less -R;;
+        ctrl-n)
+          git show --name-status --color=always ${shas} | less -R;;
+        *)
+          for sha in $shas; do
+            git show --color=always $sha | less -R
+          done
+          ;;
+      esac
+    done
+  else
+    echo -e "Not a git repo"
+  fi
+
+  zle accept-line
+}
+
+zle     -N    fzf-git-show
+bindkey '\eq' fzf-git-show
+
+
 # Local Config
 if [ -f "${PZSH}/functions.local.sh" ]; then
   source "$PZSH/functions.local.sh"
 fi
+
+calc () {
+  if [ -z "$1" ]; then
+    julia 
+  else
+    julia -E "$(echo $@)"
+  fi
+}

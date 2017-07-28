@@ -23,6 +23,7 @@ if [ "${OS}" = 'macos' ]; then
   PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
   PATH="${HOMEBREW_PREFIX}/sbin:${PATH}"
   PATH="${PATH}:/Applications/TeX/TeXShop.app/Contents/Resources/TeXShop/bin"
+  PATH="${PATH}:/opt/local/bin:/opt/local/sbin"
   MANPATH="${HOMBREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
 
   FDK_EXE="${HOME}/bin/FDK/Tools/osx"
@@ -51,3 +52,5 @@ export PATH
 if [ -f "${PZSH}/environment.local.sh" ]; then
   source "$PZSH/environment.local.sh"
 fi
+
+export PATH=$(echo $PATH | tr ':' '\n' | sort | uniq | tr '\n' ':')

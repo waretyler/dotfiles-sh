@@ -20,7 +20,7 @@ alias lp='(cd $p && (ls.git | cut -b 3-))'
 alias cdp='project_dir=$(lp | fzf) && cd "$p/$project_dir"' 
 
 alias -g e="nvim"
-alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim -c "Denite buffer")'
+alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim)'
 alias -g e.p='cd.p && ef'
 
 alias rmf="(fzf -m || exit 0) | rm -rf"
@@ -36,7 +36,7 @@ alias gh.view='(gh.select_repo && open "https://github.com/${github_repo}")'
 alias gco='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 
 alias s?="search"
-
+alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs open)'
 
 # macos specfic
 if [ "$OS" = "macos" ]; then
