@@ -7,4 +7,4 @@ fi
 export PZSH="$(dirname "$( $READLINK -f ~/.profile)")"
 source $PZSH/environment.sh
 
-nvm use --silent default 
+hash nvm 2>/dev/null && nvm use --silent default

@@ -31,12 +31,12 @@ alias g.ppull='(cd.p && git pull)'
 
 alias gh.select_repo='github_repo=$(select_github_repositories)'
 alias gh.clone='(gh.select_repo && cd $p && git clone "https://github.com/${github_repo}")'
-alias gh.view='(gh.select_repo && open "https://github.com/${github_repo}")'
+alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 
 alias gco='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 
-alias s?="search"
-alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs open)'
+#alias s?="search"
+alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
 # macos specfic
 if [ "$OS" = "macos" ]; then

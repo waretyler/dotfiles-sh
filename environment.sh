@@ -1,4 +1,4 @@
-export OS="$(~/bin/which-os)"
+export OS="$(uname | tr "[A-Z]" "[a-z]")"
 export ZSH="${HOME}/.oh-my-zsh"
 
 # Location
@@ -8,16 +8,15 @@ export dbox=~/Dropbox
 export life=$dbox/life
 export org=$dbox/org
 export notes=$life/notes
-export config=$p/configuration
+export config=$HOME/.config/personal
 
 # environment fun
-export EDITOR=/usr/local/bin/nvim
 export CLICOLOR=1
 
 # gnu global tags
 export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 
-if [ "${OS}" = 'macos' ]; then
+if [ "${OS}" = 'darwin' ]; then
   # Homebrew
   HOMEBREW_PREFIX="$(brew --prefix)"
   PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
@@ -28,15 +27,18 @@ if [ "${OS}" = 'macos' ]; then
 
   FDK_EXE="${HOME}/bin/FDK/Tools/osx"
   SSH_ASKPASS="$HOMEBREW_PREFIX/bin/ssh-askpass"
-
+  EDITOR=/usr/local/bin/nvim
+elif [ "${OS}" = 'linux' ]; then
+  EDITOR=/usr/bin/nvim
 fi
 
+export EDITOR
 export FDK_EXE
 
 export NVM_DIR="${HOME}/.nvm"
-[ -s "${NVM_DIR}/nvm.sh" ] && . "${NVM_DIR}/nvm.sh" --no-use 
+[ -s "${NVM_DIR}/nvm.sh" ] && . "${NVM_DIR}/nvm.sh" 
 
-export MANPATH
+
 
 # path
 PATH="${PATH}:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -46,7 +48,7 @@ PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${p}/go/bin"
 PATH="${PATH}:${FDX_EXE}"
 PATH="${PATH}:${NVM_BIN}"
-export PATH
+export MANPATH
 
 # Local Config
 if [ -f "${PZSH}/environment.local.sh" ]; then
@@ -54,3 +56,4 @@ if [ -f "${PZSH}/environment.local.sh" ]; then
 fi
 
 export PATH=$(echo $PATH | tr ':' '\n' | sort | uniq | tr '\n' ':')
+

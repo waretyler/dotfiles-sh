@@ -9,7 +9,7 @@ fpath=($fpath "${PZSH}/completions")
 autoload -U compinit
 compinit
 
-plugins=(svn npm)
+plugins=(npm)
 
 
 source_files=( \
@@ -22,14 +22,12 @@ source_files=( \
 for source_file in ${source_files[*]}; do
   if [ -f "${source_file}" ]; then
     source "${source_file}"
-  else
-    echo "Warning: There was an issue sourcing '${source_file}'"
   fi
 done
 
 
-#set vi mode
-# set -o vi
+#set emacs mode
+set -o emacs 
 
 # Bind keys
 bindkey "\C-f" history-incremental-search-forward 
@@ -49,3 +47,4 @@ bindkey "\C-p" up-line-or-history
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+
