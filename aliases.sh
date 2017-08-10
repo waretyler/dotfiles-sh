@@ -3,6 +3,8 @@ alias g="git"
 
 alias f="fzf --query"
 
+alias g.fzf="g ls-files | fzf"
+
 # LaTex
 alias watchtex="latexmk -gg -bibtex-cond -pdf -pvc"
 alias cleantex="rm *.{aux,fdb_latexmk,fls,log,pdf}"
