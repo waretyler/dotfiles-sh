@@ -25,25 +25,25 @@ alias -g e="nvim"
 alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim)'
 alias -g e.p='cd.p && ef'
 
-alias rmf="(fzf -m || exit 0) | rm -rf"
+alias rmf="(fzf -m --preview='cat {}' || exit 0) | xargs rm -rf"
 
 alias g.root="cd \$(git rev-parse --show-toplevel)"
 alias g.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
 alias g.ppull='(cd.p && git pull)'
+alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 
 alias gh.select_repo='github_repo=$(select_github_repositories)'
 alias gh.clone='(gh.select_repo && cd $p && git clone "https://github.com/${github_repo}")'
 alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 
-alias gco='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
-
 #alias s?="search"
 alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
 # macos specfic
-if [ "$OS" = "macos" ]; then
+if [ "$OS" = "darwin" ]; then
   alias osReference="grep '^ *kVK' /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h|tr -d ,|while read x y z;do printf '%d %s %s\n' $z $z ${x#kVK_};done|sort -n"
   alias os.o='application=$(ls -1 /Applications | sed "s/.app//" | fzf) && open -a ${application}.app'
+  alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
 fi
 
 # Local configuration

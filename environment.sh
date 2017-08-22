@@ -29,6 +29,8 @@ if [ "${OS}" = 'darwin' ]; then
   FDK_EXE="${HOME}/bin/FDK/Tools/osx"
   SSH_ASKPASS="$HOMEBREW_PREFIX/bin/ssh-askpass"
   EDITOR=/usr/local/bin/nvim
+
+  [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 elif [ "${OS}" = 'linux' ]; then
   EDITOR=/usr/bin/nvim
 fi
@@ -58,3 +60,4 @@ fi
 
 export PATH=$(echo $PATH | tr ':' '\n' | sort | uniq | tr '\n' ':')
 
+export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || ag -g "") 2> /dev/null'

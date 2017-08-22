@@ -136,7 +136,7 @@ journal() {
 
 # make functions that allow quick editing and completion of files
 quick kl 'e' "$life/klist" '.md'
-quick n 'xdg-open' $life/notes '.org'
+quick n 'xdg-open' $org '.org'
 quick esh 'e' $PZSH '.sh'
 quick ebin 'e' ~/bin ''
 quick lesson 'e' "$life/lesson" ".md" "normal Godts YpVr-vipgqo" "+star"
