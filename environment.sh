@@ -9,6 +9,7 @@ export life=$dbox/life
 export org=$dbox/org
 export notes=$life/notes
 export config=$HOME/.config/personal
+export scripts=$HOME/scripts
 
 # environment fun
 export CLICOLOR=1

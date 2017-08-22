@@ -54,3 +54,5 @@ fi
 if [[ "$(echo $SHELL | grep -oh '[^/]*$')" = "zsh" ]]; then
   alias bindkey.ls="bindkey | fzf > /dev/null"
 fi
+
+alias lcat="ls | fzf -m --preview='cat {}'"
