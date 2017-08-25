@@ -18,18 +18,17 @@ alias ls.d="(find . -type d | sed 's/\/$//')"
 alias ls.idea='(ls_dir_match ".idea" "node_modules")'
 alias ls.git='(ls_dir_match ".git" "node_modules")'
 
-alias lp='(cd $p && (ls.git | cut -b 3-))'
-alias cdp='project_dir=$(lp | fzf) && cd "$p/$project_dir"' 
+alias cdp='project_dir=$(psel) && cd $project_dir' 
 
 alias -g e="nvim"
 alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim)'
-alias -g e.p='cd.p && ef'
+alias -g e.p='cdp && ef'
 
-alias rmf="(fzf -m --preview='cat {}' || exit 0) | xargs rm -rf"
+alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
 
 alias g.root="cd \$(git rev-parse --show-toplevel)"
 alias g.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
-alias g.ppull='(cd.p && git pull)'
+alias g.ppull='(psel | while read -r dir; do; cd $dir && git pull; done)'
 alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 
 alias gh.select_repo='github_repo=$(select_github_repositories)'

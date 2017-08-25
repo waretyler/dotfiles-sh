@@ -171,6 +171,20 @@ switchEmacsConfig() {
 switchToSpacemacs() { switchEmacsConfig ~/.spacemacs.d }
 switchFromSpacemacs() { switchEmacsConfig ~/.emacs_back.d }
 
+cd2path() {
+  if [ -z "$1" ]; then
+    exit
+  fi
+
+  source_path=$(which $1 2> /dev/null)
+
+  if [ -z "$source_path" ]; then
+    exit
+  fi
+
+  cd $(echo $source_path | sed 's/\/[^/]*$//')
+}
+
 fzf-git-show() {
   local out shas sha q k
 
@@ -225,4 +239,8 @@ calc () {
   else
     julia -E "$(echo $@)"
   fi
+}
+
+jcat () {
+  cat $@ | jq .
 }

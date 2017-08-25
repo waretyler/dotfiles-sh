@@ -10,6 +10,7 @@ export org=$dbox/org
 export notes=$life/notes
 export config=$HOME/.config/personal
 export scripts=$HOME/scripts
+export s=$scripts
 
 # environment fun
 export CLICOLOR=1
@@ -48,6 +49,7 @@ PATH="${PATH}:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 # PATH=$PATH:/Library/TeX/texbin
 PATH="${PATH}:${HOME}/bin"
+PATH="${PATH}:${HOME}/scripts/utils"
 PATH="${PATH}:${p}/go/bin"
 PATH="${PATH}:${FDX_EXE}"
 PATH="${PATH}:${NVM_BIN}"
