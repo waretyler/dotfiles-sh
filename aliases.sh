@@ -1,6 +1,17 @@
 alias -g .so=". ~/.zshrc"
 alias g="git"
 
+if [ "$OS" = "darwin" ]; then
+  alias osReference="grep '^ *kVK' /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h|tr -d ,|while read x y z;do printf '%d %s %s\n' $z $z ${x#kVK_};done|sort -n"
+  alias os.o='application=$(ls -1 /Applications | sed "s/.app//" | fzf) && open -a ${application}.app'
+  alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+  alias c="pbcopy"
+  alias v="pbpaste"
+elif [ "$OS" = "linux" ]; then
+  alias c="xclip -selection clipboard"
+  alias v="c -o"
+fi
+
 alias f="fzf --query"
 
 alias g.fzf="g ls-files | fzf"
@@ -11,7 +22,7 @@ alias cleantex="rm *.{aux,fdb_latexmk,fls,log,pdf}"
 alias lt="tree -LC 2"
 alias less="less -r"
 
-alias patch.paste="pbpaste | patch -p0"
+alias patch.paste="v | patch -p0"
 
 alias lf="ls_fzf"
 alias ls.d="(find . -type d | sed 's/\/$//')"
@@ -38,12 +49,6 @@ alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 #alias s?="search"
 alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
-# macos specfic
-if [ "$OS" = "darwin" ]; then
-  alias osReference="grep '^ *kVK' /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h|tr -d ,|while read x y z;do printf '%d %s %s\n' $z $z ${x#kVK_};done|sort -n"
-  alias os.o='application=$(ls -1 /Applications | sed "s/.app//" | fzf) && open -a ${application}.app'
-  alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
-fi
 
 # Local configuration
 if [ -f $PZSH/aliases.local.sh ]; then
