@@ -60,3 +60,4 @@ if [[ "$(echo $SHELL | grep -oh '[^/]*$')" = "zsh" ]]; then
 fi
 
 alias lcat="ls | fzf -m --preview='cat {}'"
+alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"

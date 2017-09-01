@@ -244,3 +244,33 @@ calc () {
 jcat () {
   cat $@ | jq .
 }
+
+
+fzf_choose_script() {
+    local script_to_run=$(ag $scripts -g "" | fzf --preview 'cat {}')
+    LBUFFER="${LBUFFER}${script_to_run}"
+    local ret=$?
+    zle redisplay
+    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    return $ret
+}
+
+
+zle     -N    fzf_choose_script
+bindkey '\er' fzf_choose_script
+
+fzf_choose_command() {
+  local command_to_run=$((for dir in $path; do
+  ls $dir 
+  done && (alias | cut -d = -f 1)) | \
+    sort | \
+    fzf --preview '(man {} 2>/dev/null) || (cat $(which {}) 2>/dev/null) || echo "No clue about: {}"')
+    LBUFFER="${LBUFFER}${command_to_run}"
+    local ret=$?
+    zle redisplay
+    typeset -f zle-line-init >/dev/null && zle zle-line-init
+    return $ret
+}
+
+zle     -N    fzf_choose_command
+bindkey '\ee' fzf_choose_command
