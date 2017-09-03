@@ -1,5 +1,7 @@
 export OS="$(uname | tr "[A-Z]" "[a-z]")"
+[ "$OS" = 'darwin' ] && export HOMEBREW_PREFIX="$(brew --prefix)"
 export ZSH="${HOME}/.oh-my-zsh"
+
 
 # Location
 export docs=~/Documents
@@ -18,13 +20,17 @@ export CLICOLOR=1
 # gnu global tags
 export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 
+PATH=""
+
 if [ "${OS}" = 'darwin' ]; then
   # Homebrew
-  HOMEBREW_PREFIX="$(brew --prefix)"
   PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
+  PATH="${HOMEBREW_PREFIX}/opt/texinfo/bin:${PATH}"
   PATH="${HOMEBREW_PREFIX}/sbin:${PATH}"
+  PATH="${HOMEBREW_PREFIX}/bin:${PATH}"
   PATH="${PATH}:/Applications/TeX/TeXShop.app/Contents/Resources/TeXShop/bin"
   PATH="${PATH}:/opt/local/bin:/opt/local/sbin"
+  PATH="${PATH}:${HOME}/miniconda3/bin"
   MANPATH="${HOMBREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
 
   FDK_EXE="${HOME}/bin/FDK/Tools/osx"
@@ -40,20 +46,19 @@ fi
 export EDITOR
 export FDK_EXE
 
+
 export NVM_DIR="${HOME}/.nvm"
 [ -s "${NVM_DIR}/nvm.sh" ] && . "${NVM_DIR}/nvm.sh" 
 
 
-
 # path
-PATH="${PATH}:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 # PATH=$PATH:/Library/TeX/texbin
 PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${HOME}/scripts/utils"
 PATH="${PATH}:${p}/go/bin"
 PATH="${PATH}:${FDX_EXE}"
-PATH="${PATH}:${NVM_BIN}"
 export MANPATH
 
 # Local Config
@@ -61,6 +66,9 @@ if [ -f "${PZSH}/environment.local.sh" ]; then
   source "$PZSH/environment.local.sh"
 fi
 
-export PATH=$(echo $PATH | tr ':' '\n' | sort | uniq | tr '\n' ':')
+# make sure nvm get's the last say on node
+PATH="${NVM_BIN}:${PATH}"
+export PATH
 
-export FZF_DEFAULT_COMMAND='(git ls-tree -r --name-only HEAD || ag -g "") 2> /dev/null'
+
+export FZF_DEFAULT_COMMAND='(ag --hidden --ignore node_modules --ignore .git --ignore .idea --ignore .DS_Store -g "") 2> /dev/null'

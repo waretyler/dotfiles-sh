@@ -61,3 +61,4 @@ fi
 
 alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
+alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"

@@ -15,8 +15,7 @@ plugins=(npm)
 source_files=( \
   "$ZSH/oh-my-zsh.sh" \
   "$PZSH/aliases.sh" \
-  "$PZSH/functions.sh" \
-  "$HOME/.source/composure.sh" \
+  "$PZSH/functions.sh"
 )
 
 for source_file in ${source_files[*]}; do
