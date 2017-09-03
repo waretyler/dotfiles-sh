@@ -34,6 +34,7 @@ if [ "${OS}" = 'darwin' ]; then
   [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 elif [ "${OS}" = 'linux' ]; then
   EDITOR=/usr/bin/nvim
+  PATH="$HOME/miniconda3/bin:$PATH"
 fi
 
 export EDITOR
