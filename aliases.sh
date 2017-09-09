@@ -13,6 +13,7 @@ elif [ "$OS" = "linux" ]; then
 fi
 
 alias f="fzf --query"
+alias path.f='echo $path | tr " " "\n" | fzf -m --preview "ls {}"'
 
 alias g.fzf="g ls-files | fzf"
 
@@ -32,7 +33,12 @@ alias ls.git='(ls_dir_match ".git" "node_modules")'
 alias cdp='project_dir=$(psel) && cd $project_dir' 
 
 alias -g e="nvim"
-alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs nvim)'
+alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs e)'
+alias -g e.="(cd $config/dotfiles && ef)"
+alias -g e.sh="(cd $config/zsh && ef)"
+alias -g e.vim="(cd $config/vim && ef)"
+alias -g e.emacs="(cd $config/emacs && ef)"
+alias -g e.snippets="(cd $config/snippets && ef)"
 alias -g e.p='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
