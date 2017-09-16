@@ -35,7 +35,7 @@ alias cdp='project_dir=$(psel) && cd $project_dir'
 alias -g e="nvim"
 alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs e)'
 alias -g e.="(cd $config/dotfiles && ef)"
-alias -g e.sh="(cd $config/zsh && ef)"
+alias -g e.sh="(cd $config/zsh && ef && .so)"
 alias -g e.vim="(cd $config/vim && ef)"
 alias -g e.emacs="(cd $config/emacs && ef)"
 alias -g e.snippets="(cd $config/snippets && ef)"

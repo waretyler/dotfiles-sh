@@ -247,7 +247,7 @@ jcat () {
 
 
 fzf_choose_script() {
-    local script_to_run=$(ag $scripts -g "" | fzf --preview 'cat {}')
+    local script_to_run=$(ssel)
     LBUFFER="${LBUFFER}${script_to_run}"
     local ret=$?
     zle redisplay
@@ -274,3 +274,10 @@ fzf_choose_command() {
 
 zle     -N    fzf_choose_command
 bindkey '\ee' fzf_choose_command
+
+g_fdiff () {
+  if [ -z "$1" ]; then
+    exit; 
+  fi
+  git --no-pager diff --name-status $1 | fzf -m --preview "cd $(git rev-parse --show-toplevel) && git --no-pager  diff --color=always $1 -- {-1}"
+}

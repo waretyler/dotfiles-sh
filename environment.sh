@@ -11,7 +11,7 @@ export life=$dbox/life
 export org=$dbox/org
 export notes=$life/notes
 export config=$HOME/.config/personal
-export scripts=$HOME/scripts
+export scripts=$config/scripts
 export s=$scripts
 
 # environment fun
@@ -58,7 +58,7 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
 # PATH=$PATH:/Library/TeX/texbin
 PATH="${PATH}:${HOME}/bin"
-PATH="${PATH}:${HOME}/scripts/utils"
+PATH="${PATH}:${scripts}/utils"
 PATH="${PATH}:${p}/go/bin"
 PATH="${PATH}:${FDX_EXE}"
 export MANPATH
