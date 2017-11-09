@@ -24,11 +24,11 @@ ls_fzf () {
 
 ssh_to_tmux () {
   local extra=''
-  if [[ "$3" = "--new" ]]; then
-    local extra='neww'
+  if [[ "$3" != "" ]]; then
+    local extra="send-keys '$3' Enter"
   fi
 
-  ssh $1 -t "tmux new -s \"\$(whoami)\" \\; set -g status-bg $2 || tmux attach -t \"\$(whoami)\" \\; $extra "
+  ssh $1 -t "tmux new -s \"\$(whoami)\" \\; set -g status-bg $2 \\; $extra || tmux attach -t \"\$(whoami)\" \\; $extra "
 }
 
 ls_dir_match() {

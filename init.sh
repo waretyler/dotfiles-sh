@@ -1,21 +1,16 @@
 source "$HOME/.profile"
 
-ZSH_THEME="avit"
 
 # Completion
-fpath=("${HOME}/.zsh/completion" $fpath) 
-fpath=($fpath "${PZSH}/completions")
+# fpath=("${HOME}/.zsh/completion" $fpath) 
+# fpath=($fpath "${PZSH}/completions")
 
 autoload -U compinit
 compinit
 
-plugins=(npm)
-
-
 source_files=( \
-  "$ZSH/oh-my-zsh.sh" \
-  "$PZSH/aliases.sh" \
-  "$PZSH/functions.sh"
+   "$PZSH/aliases.sh" \
+   "$PZSH/functions.sh"
 )
 
 for source_file in ${source_files[*]}; do
@@ -24,6 +19,9 @@ for source_file in ${source_files[*]}; do
   fi
 done
 
+HISTSIZE=10000
+SAVEHIST=9000
+HISTFILE=~/.zsh_history
 
 #set emacs mode
 set -o emacs 
@@ -42,8 +40,17 @@ bindkey "\C-p" up-line-or-history
 
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# [[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+# [[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
+# [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+[ -f /usr/local/share/antigen/antigen.zsh ] && . /usr/local/share/antigen/antigen.zsh
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# export PATH="$PATH:$HOME/.rvm/bin"
+# hash nvm 2>/dev/null && nvm use --silent default
+
+antigen bundle cusxio/delta-prompt 
+antigen bundle zsh-users/zsh-syntax-highlighting 
+antigen apply

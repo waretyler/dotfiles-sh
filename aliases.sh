@@ -23,7 +23,7 @@ alias cleantex="rm *.{aux,fdb_latexmk,fls,log,pdf}"
 alias lt="tree -LC 2"
 alias less="less -r"
 
-alias patch.paste="v | patch -p0"
+alias patch.paste="(v; echo -e '\n') | patch -p0"
 
 alias lf="ls_fzf"
 alias ls.d="(find . -type d | sed 's/\/$//')"
@@ -34,11 +34,11 @@ alias cdp='project_dir=$(psel) && cd $project_dir'
 
 alias -g e="nvim"
 alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs e)'
-alias -g e.="(cd $config/dotfiles && ef)"
-alias -g e.sh="(cd $config/zsh && ef && .so)"
-alias -g e.vim="(cd $config/vim && ef)"
-alias -g e.emacs="(cd $config/emacs && ef)"
-alias -g e.snippets="(cd $config/snippets && ef)"
+alias -g e.="(cd $cfg/dotfiles && ef)"
+alias -g e.sh="(cd $cfg/zsh && ef && .so)"
+alias -g e.vim="(cd $cfg/vim && ef)"
+alias -g e.emacs="(cd $cfg/emacs && ef)"
+alias -g e.snippets="(cd $cfg/snippets && ef)"
 alias -g e.p='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
@@ -67,4 +67,6 @@ fi
 
 alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
+alias g.bclean='git branch -D $(git branch | fzf -m)'
+alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
