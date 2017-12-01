@@ -45,7 +45,10 @@ bindkey "\C-p" up-line-or-history
 # uninstall by removing these lines or running `tabtab uninstall sls`
 # [[ -f /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/tware/.nvm/versions/node/v7.10.0/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
 # [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
+
+# TODO: Could start to have a link location, so install path doesn't matter
 [ -f /usr/local/share/antigen/antigen.zsh ] && . /usr/local/share/antigen/antigen.zsh
+[ -f /usr/share/zsh-antigen/antigen.zsh ] && . /usr/share/zsh-antigen/antigen.zsh
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 # export PATH="$PATH:$HOME/.rvm/bin"
