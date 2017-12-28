@@ -70,3 +70,6 @@ alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commi
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
+alias open="xdg-open"
+
+alias build.fr="(cd $ts_code/tsheets_app/trunk/.frontend && npm run build:all-for-distribution)"

@@ -1,11 +1,9 @@
 export OS="$(uname | tr "[A-Z]" "[a-z]")"
-[ "$OS" = 'darwin' ] && export HOMEBREW_PREFIX="$(brew --prefix)"
-
 
 # Location
 export docs=~/Documents
 export p=~/Projects
-export dbox=~/Dropbox
+export dbox=~/Nextcloud
 export life=$dbox/life
 export org=$dbox/org
 export notes=$life/notes
@@ -20,27 +18,8 @@ export CLICOLOR=1
 export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 
 PATH=""
-
-if [ "${OS}" = 'darwin' ]; then
-  # Homebrew
-  PATH="${HOMEBREW_PREFIX}/opt/coreutils/libexec/gnubin:${PATH}"
-  PATH="${HOMEBREW_PREFIX}/opt/texinfo/bin:${PATH}"
-  PATH="${HOMEBREW_PREFIX}/sbin:${PATH}"
-  PATH="${HOMEBREW_PREFIX}/bin:${PATH}"
-  PATH="${PATH}:/Applications/TeX/TeXShop.app/Contents/Resources/TeXShop/bin"
-  PATH="${PATH}:/opt/local/bin:/opt/local/sbin"
-  PATH="${PATH}:${HOME}/miniconda3/bin"
-  MANPATH="${HOMBREW_PREFIX}/opt/coreutils/libexec/gnuman:${MANPATH}"
-
-  FDK_EXE="${HOME}/bin/FDK/Tools/osx"
-  SSH_ASKPASS="$HOMEBREW_PREFIX/bin/ssh-askpass"
-  EDITOR=/usr/local/bin/nvim
-
-  # [ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
-elif [ "${OS}" = 'linux' ]; then
-  EDITOR=/usr/bin/nvim
-  PATH="$HOME/miniconda3/bin:$PATH"
-fi
+EDITOR=/usr/bin/nvim
+PATH="$HOME/miniconda3/bin:$PATH"
 
 export EDITOR
 export FDK_EXE
@@ -59,7 +38,7 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${scripts}/utils"
 PATH="${PATH}:${HOME}/go/bin"
-PATH="${PATH}:${FDX_EXE}"
+# PATH="${PATH}:${FDX_EXE}"
 export MANPATH
 
 # Local Config
