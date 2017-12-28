@@ -69,6 +69,7 @@ alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
+alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias open="xdg-open"
 
