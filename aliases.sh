@@ -33,13 +33,14 @@ alias ls.git='(ls_dir_match ".git" "node_modules")'
 alias cdp='project_dir=$(psel) && cd $project_dir' 
 
 alias -g e="nvim"
-alias -g ef='edit_files=$(fzf -m) && (echo $edit_files | xargs e)'
-alias -g e.="(cd $cfg/dotfiles && ef)"
-alias -g e.sh="(cd $cfg/zsh && ef && .so)"
-alias -g e.vim="(cd $cfg/vim && ef)"
-alias -g e.emacs="(cd $cfg/emacs && ef)"
-alias -g e.snippets="(cd $cfg/snippets && ef)"
-alias -g e.p='cdp && ef'
+alias -g ef='nvim -c "FZF"'
+alias -g e="(cd $cfg/dotfiles && ef)"
+alias -g esh="(cd $cfg/zsh && ef && .so)"
+alias -g erg="(cd $org && ef)"
+alias -g evim="(cd $cfg/vim && ef)"
+alias -g esrc="(cd $s && ef)"
+alias -g esnippets="(cd $cfg/snippets && ef)"
+alias -g ep='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
 
@@ -73,4 +74,3 @@ alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); d
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias open="xdg-open"
 
-alias erg="(cd $org && nvim -c 'FZF')"
