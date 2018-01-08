@@ -281,3 +281,8 @@ g_fdiff () {
   fi
   git --no-pager diff --name-status $1 | fzf -m --preview "cd $(git rev-parse --show-toplevel) && git --no-pager  diff --color=always $1 -- {-1}"
 }
+
+
+csvcutf() {
+  csvcut -c "$(csvcut -n $1 | fzf -m | egrep -oh '^\s*[0-9]*' | sed -e 's/\s//g' | head -c -1 | tr '\n' ',')" $1 
+}
