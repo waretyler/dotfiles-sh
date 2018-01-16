@@ -61,20 +61,6 @@ man () {
   /usr/bin/man $@ || (help $@ 2> /dev/null && help $@ | less)
 }
 
-cd2path() {
-  if [ -z "$1" ]; then
-    exit
-  fi
-
-  source_path=$(which $1 2> /dev/null)
-
-  if [ -z "$source_path" ]; then
-    exit
-  fi
-
-  cd $(echo $source_path | sed 's/\/[^/]*$//')
-}
-
 fzf-git-show() {
   local out shas sha q k
 
@@ -175,4 +161,8 @@ g_fdiff () {
 
 csvcutf() {
   csvcut -c "$(csvcut -n $1 | fzf -m | egrep -oh '^\s*[0-9]*' | sed -e 's/\s//g' | head -c -1 | tr '\n' ',')" $1 
+}
+
+wiki() {
+  w3m "https://en.wikipedia.org/w/index.php?search=${@}"
 }

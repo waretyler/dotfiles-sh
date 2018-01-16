@@ -1,6 +1,5 @@
 source "$HOME/.profile"
 
-
 # Completion
 # fpath=("${HOME}/.zsh/completion" $fpath) 
 # fpath=($fpath "${PZSH}/completions")

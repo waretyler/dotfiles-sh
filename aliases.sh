@@ -15,7 +15,6 @@ fi
 alias f="fzf --query"
 alias path.f='echo $path | tr " " "\n" | fzf -m --preview "ls {}"'
 
-alias g.fzf="g ls-files | fzf"
 
 # LaTex
 alias watchtex="latexmk -gg -bibtex-cond -pdf -pvc"
@@ -32,15 +31,15 @@ alias ls.git='(ls_dir_match ".git" "node_modules")'
 
 alias cdp='project_dir=$(psel) && cd $project_dir' 
 
-alias -g e="nvim"
-alias -g ef='nvim -c "FZF"'
-alias -g e="(cd $cfg/dotfiles && ef)"
-alias -g esh="(cd $cfg/zsh && ef && .so)"
-alias -g erg="(cd $org && ef)"
-alias -g evim="(cd $cfg/vim && ef)"
-alias -g esrc="(cd $s && ef)"
-alias -g esnippets="(cd $cfg/snippets && ef)"
-alias -g ep='cdp && ef'
+alias e="nvim"
+alias ef='nvim -c "FZF"'
+alias edot="(cd $cfg/dotfiles && ef)"
+alias esh="(cd $cfg/zsh && ef && .so)"
+alias erg="(cd $org && ef)"
+alias evim="(cd $cfg/vim && ef)"
+alias esrc="(cd $s && ef)"
+alias esnippets="(cd $cfg/snippets && ef)"
+alias ep='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
 
@@ -48,6 +47,8 @@ alias g.root="cd \$(git rev-parse --show-toplevel)"
 alias g.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
 alias g.ppull='(psel | while read -r dir; do; cd $dir && git pull; done)'
 alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
+alias g.ls="git status | grep '^\\s*[a-zA-Z]*:' | awk '{print \$(NF)}'"
+alias g.fzf="g.ls | fzf -m --preview 'git diff HEAD {}'"
 
 alias gh.select_repo='github_repo=$(select_github_repositories)'
 alias gh.clone='(gh.select_repo && cd $p && git clone "https://github.com/${github_repo}")'
