@@ -33,6 +33,7 @@ alias cdp='project_dir=$(psel) && cd $project_dir'
 
 alias e="nvim"
 alias ef='nvim -c "FZF"'
+alias er='nvim -c "History"'
 alias edot="(cd $cfg/dotfiles && ef)"
 alias esh="(cd $cfg/zsh && ef && .so)"
 alias erg="(cd $org && ef)"
