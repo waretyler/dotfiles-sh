@@ -4,9 +4,7 @@ export OS="$(uname | tr "[A-Z]" "[a-z]")"
 export docs=~/Documents
 export p=~/Projects
 export dbox=~/Nextcloud
-export life=$dbox/life
-export org=$dbox/org
-export notes=$life/notes
+export org=$HOME/org
 export cfg=$HOME/.config/personal
 export scripts=$cfg/scripts
 export s=$scripts
@@ -57,4 +55,4 @@ export PATH
 
 # [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-export FZF_DEFAULT_COMMAND='(ag --hidden --ignore node_modules --ignore .git --ignore .idea --ignore .DS_Store -g "") 2> /dev/null'
+export FZF_DEFAULT_COMMAND='(ag --hidden --ignore node_modules --ignore .git --ignore .idea --ignore .DS_Store -f -g "") 2> /dev/null'
