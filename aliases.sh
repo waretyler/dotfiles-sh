@@ -39,7 +39,7 @@ alias esh="(cd $cfg/zsh && ef && .so)"
 alias erg="(cd $org && ef)"
 alias evim="(cd $cfg/vim && ef)"
 alias esrc="(cd $s && ef)"
-alias esnippets="(cd $cfg/snippets && ef)"
+alias esnip="(cd $cfg/templates && ef)"
 alias ep='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
@@ -50,6 +50,7 @@ alias g.ppull='(psel | while read -r dir; do; cd $dir && git pull; done)'
 alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 alias g.ls="git status | grep '^\\s*[a-zA-Z]*:' | awk '{print \$(NF)}'"
 alias g.fzf="g.ls | fzf -m --preview 'git diff HEAD {}'"
+alias gaf='git add `g.fzf`'
 
 alias gh.select_repo='github_repo=$(select_github_repositories)'
 alias gh.clone='(gh.select_repo && cd $p && git clone "https://github.com/${github_repo}")'
