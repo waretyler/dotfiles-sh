@@ -77,3 +77,5 @@ alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); d
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias open="xdg-open"
 
+
+alias wreado="while read -r line; do;"

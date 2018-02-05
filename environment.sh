@@ -36,6 +36,7 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${scripts}/utils"
 PATH="${PATH}:${HOME}/go/bin"
+PATH="${PATH}:${HOME}/.cargo/bin"
 # PATH="${PATH}:${FDX_EXE}"
 export MANPATH
 
