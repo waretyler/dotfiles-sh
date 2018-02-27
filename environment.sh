@@ -18,6 +18,7 @@ export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 PATH=""
 EDITOR=/usr/bin/nvim
 PATH="$HOME/miniconda3/bin:$PATH"
+export MANPAGER="nvim -c 'set ft=man' -"
 
 export EDITOR
 export FDK_EXE
