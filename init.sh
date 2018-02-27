@@ -32,6 +32,10 @@ bindkey "\C-r" history-incremental-search-backward
 bindkey "\C-n" down-line-or-history 
 bindkey "\C-p" up-line-or-history 
 
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey "\C-x\C-e" edit-command-line 
+
 #for bash
 #bind '"\C-f": forward-search-history'
 
