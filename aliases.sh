@@ -84,3 +84,5 @@ alias wreado="while read -r line; do;"
 
 
 alias tmux.ls="tmux list-sessions"
+
+alias tail.sys="tail -f /var/log/syslog"
