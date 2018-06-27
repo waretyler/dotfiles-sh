@@ -16,8 +16,13 @@ export CLICOLOR=1
 export MAKEOBJDIRPREFIX=$HOME/wa/globaltags
 
 PATH=""
-EDITOR=/usr/bin/nvim
 PATH="$HOME/miniconda3/bin:$PATH"
+
+if [ "${OS}" = "darwin" ]; then
+  EDITOR=/usr/local/bin/nvim
+elif [ "${OS}" = "linux" ]; then
+  EDITOR=/usr/bin/nvim
+fi
 export MANPAGER="nvim -c 'set ft=man' -"
 
 export EDITOR
@@ -37,13 +42,16 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 PATH="${PATH}:${HOME}/bin"
 PATH="${PATH}:${scripts}/utils"
 PATH="${PATH}:${HOME}/go/bin"
-PATH="${PATH}:${HOME}/.cargo/bin"
 # PATH="${PATH}:${FDX_EXE}"
 export MANPATH
 
 # Local Config
 if [ -f "${PZSH}/environment.local.sh" ]; then
   source "$PZSH/environment.local.sh"
+fi
+
+if [[ -d "$HOME/node_tools" ]]; then
+  PATH="${PATH}:${HOME}/node_tools/node_modules/.bin" 
 fi
 
 if [[ -d "$HOME/.cargo" ]]; then

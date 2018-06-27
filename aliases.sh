@@ -10,6 +10,7 @@ if [ "$OS" = "darwin" ]; then
 elif [ "$OS" = "linux" ]; then
   alias c="xclip -selection clipboard"
   alias v="c -o"
+  alias open="xdg-open"
 fi
 
 alias f="fzf --query"
@@ -77,7 +78,6 @@ alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egre
 alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
 alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias v.jq="v | jq"
-alias open="xdg-open"
 
 
 alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.json | fzf | awk 'BEGIN{FS=\",\"} {print \$1}' | xargs npm run"

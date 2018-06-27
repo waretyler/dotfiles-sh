@@ -203,3 +203,20 @@ explain () {
         echo "explain 'cmd -o | ...'   quoted command to be explainedt."
     fi
 }
+
+mv_up() {
+  if [ -z "$1" ]; then
+    return 
+  fi
+
+  local dest_dir="$1"
+  local seperator="-"
+  local dir_prefix="${dest_dir}${seperator}"
+
+  mkdir "$dest_dir" && \
+  ls | grep "$dir_prefix" \
+    | while read -r dir; do;
+      local dir_sans_prefix="$(echo $dir | sed "s/^$dir_prefix//")"
+      mv "$dir" "./${dest_dir}/${dir_sans_prefix}"
+    done
+}
