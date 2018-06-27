@@ -80,9 +80,17 @@ alias v.jq="v | jq"
 alias open="xdg-open"
 
 
+alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.json | fzf | awk 'BEGIN{FS=\",\"} {print \$1}' | xargs npm run"
+alias cd.p='cd_fzf_to_dir $p'
+alias cd.f='cd_fzf_to_dir'
+
+
 alias wreado="while read -r line; do;"
 
 
 alias tmux.ls="tmux list-sessions"
 
 alias tail.sys="tail -f /var/log/syslog"
+
+alias filter.dir="grep -Ev '\\/{0,1}(\\.git|node_modules|.idea)\\/{0,1}'"
+alias filter.empty="grep ."

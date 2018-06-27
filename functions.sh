@@ -175,5 +175,31 @@ zle     -N    fzf-git-show
 bindkey '\eq' fzf-git-show
 
 
+get_dir() {
+  echo "${1:-.}"
+}
 
+fzf_dir() {
+  local dir="$(get_dir $1)"
+  cd $dir && find -L . -maxdepth ${2:-7} -type d | perl -lne 'print tr:/::, " $_"' | sort -n | cut -d' ' -f2 | cut -c 3- | filter.dir | filter.empty | fzf
+}
 
+cd_fzf_to_dir() {
+  local dir="$(get_dir $1)"
+  cd "$dir/$(fzf_dir "$dir" "2")"
+}
+
+explain () {
+    if [ "$#" -eq 0 ]; then
+        while read  -p "Command: " cmd; do
+            curl -Gs "https://www.mankier.com/api/explain/?cols="$(tput cols) --data-urlencode "q=$cmd"
+        done
+        echo -e "\n"
+    elif [ "$#" -eq 1 ]; then
+        curl -Gs "https://www.mankier.com/api/explain/?cols="$(tput cols) --data-urlencode "q=$1"
+    else
+        echo "Usage"
+        echo "explain                  interactive mode."
+        echo "explain 'cmd -o | ...'   quoted command to be explainedt."
+    fi
+}
