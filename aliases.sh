@@ -46,7 +46,7 @@ alias ep='cdp && ef'
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
 
 alias g.root="cd \$(git rev-parse --show-toplevel)"
-alias g.clean="(git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf)"
+alias g.clean="(g.root && (git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf))"
 alias g.ppull='(psel | while read -r dir; do; cd $dir && git pull; done)'
 alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
 alias g.ls="git status | grep '^\\s*[a-zA-Z]*:' | awk '{print \$(NF)}'"

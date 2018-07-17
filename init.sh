@@ -61,8 +61,10 @@ antigen bundle cusxio/delta-prompt
 antigen bundle zsh-users/zsh-syntax-highlighting 
 antigen apply
 
-PATH="/home/tware/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/tware/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/tware/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/tware/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/tware/perl5"; export PERL_MM_OPT;
+if [ -d "/home/tware/perl5" ]; then
+  PATH="/home/tware/perl5/bin${PATH:+:${PATH}}"; export PATH;
+  PERL5LIB="/home/tware/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+  PERL_LOCAL_LIB_ROOT="/home/tware/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+  PERL_MB_OPT="--install_base \"/home/tware/perl5\""; export PERL_MB_OPT;
+  PERL_MM_OPT="INSTALL_BASE=/home/tware/perl5"; export PERL_MM_OPT;
+fi

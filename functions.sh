@@ -57,6 +57,33 @@ select_github_repositories () {
   github_get_search $ARGS | fzf 
 }
 
+github_repos () {
+  curl -s \
+    -H "Authorization: Bearer ${GH_TOKEN}" \
+    -X POST \
+    -d "{ \"query\": \" \
+     query { \
+      search(query: \\\"$1\\\", type: REPOSITORY, first:50) { \
+        repositoryCount \
+        pageInfo { \
+          endCursor \
+          startCursor \
+        } \
+        edges { \
+          node { \
+            ... on Repository { \
+              nameWithOwner \
+            } \
+          } \
+        } \
+      } \
+    }  \
+    \" }" \
+    "${GH_BASE}/api/graphql" \
+    | jq -r '.data.search.edges[].node | .nameWithOwner' \
+    | sort
+}
+
 man () {
   /usr/bin/man $@ || (help $@ 2> /dev/null && help $@ | less)
 }
@@ -220,3 +247,5 @@ mv_up() {
       mv "$dir" "./${dest_dir}/${dir_sans_prefix}"
     done
 }
+
+
