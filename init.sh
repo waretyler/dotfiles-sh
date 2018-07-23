@@ -18,9 +18,6 @@ for source_file in ${source_files[*]}; do
   fi
 done
 
-HISTSIZE=10000
-SAVEHIST=9000
-HISTFILE=~/.zsh_history
 
 #set emacs mode
 set -o emacs 
@@ -68,3 +65,14 @@ if [ -d "/home/tware/perl5" ]; then
   PERL_MB_OPT="--install_base \"/home/tware/perl5\""; export PERL_MB_OPT;
   PERL_MM_OPT="INSTALL_BASE=/home/tware/perl5"; export PERL_MM_OPT;
 fi
+
+
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt APPEND_HISTORY # Don't erase history
+setopt EXTENDED_HISTORY # Add additional data to history like timestamp
+setopt INC_APPEND_HISTORY # Add immediately
+setopt HIST_SAVE_NO_DUPS # Don't save any duplicates
+setopt NO_HIST_BEEP # Don't beep
+setopt SHARE_HISTORY # Share history between session/terminals
