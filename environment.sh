@@ -59,6 +59,12 @@ if [[ -d "$HOME/.cargo" ]]; then
   # source "${HOME}/.cargo/env" 
 fi
 
+
+if [ ! -z "$(which go)" ]; then
+  export GOBIN="${HOME}/go/bin"
+  PATH="${PATH}:${GOBIN}"
+fi
+
 # make sure nvm get's the last say on node
 PATH="${NVM_BIN}:${PATH}"
 export PATH
