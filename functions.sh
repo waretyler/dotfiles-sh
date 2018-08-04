@@ -146,10 +146,7 @@ csvcutf() {
 }
 
 
-# Local Config
-if [ -f "${PZSH}/functions.local.sh" ]; then
-  source "$PZSH/functions.local.sh"
-fi
+source_file "$cfg_zsh/functions.local.sh"
 
 calc () {
   if [ -z "$1" ]; then

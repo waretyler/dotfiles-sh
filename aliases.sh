@@ -1,21 +1,8 @@
 alias -g .so=". ~/.zshrc"
 alias g="git"
 
-if [ "$OS" = "darwin" ]; then
-  alias osReference="grep '^ *kVK' /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h|tr -d ,|while read x y z;do printf '%d %s %s\n' $z $z ${x#kVK_};done|sort -n"
-  alias os.o='application=$(ls -1 /Applications | sed "s/.app//" | fzf) && open -a ${application}.app'
-  alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
-  alias c="pbcopy"
-  alias v="pbpaste"
-elif [ "$OS" = "linux" ]; then
-  alias c="xclip -selection clipboard"
-  alias v="c -o"
-  alias open="xdg-open"
-fi
-
 alias f="fzf --query"
 alias path.f='echo $path | tr " " "\n" | fzf -m --preview "ls {}"'
-
 
 # LaTex
 alias watchtex="latexmk -gg -bibtex-cond -pdf -pvc"
@@ -62,14 +49,9 @@ alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
 
-# Local configuration
-if [ -f $PZSH/aliases.local.sh ]; then
-  source $PZSH/aliases.local.sh
-fi
-
-if [[ "$(echo $SHELL | grep -oh '[^/]*$')" = "zsh" ]]; then
-  alias bindkey.ls="bindkey | fzf > /dev/null"
-fi
+source_file "$cfg_zsh/aliases.local.sh"
+source_file "$cfg_zsh/$SHELL_NAME/aliases.sh"
+source_file "$cfg_zsh/$OS/aliases.sh"
 
 alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
@@ -87,10 +69,7 @@ alias cd.f='cd_fzf_to_dir'
 
 alias wreado="while read -r line; do;"
 
-
 alias tmux.ls="tmux list-sessions"
-
 alias tail.sys="tail -f /var/log/syslog"
-
 alias filter.dir="grep -Ev '\\/{0,1}(\\.git|node_modules|.idea)\\/{0,1}'"
 alias filter.empty="grep ."
