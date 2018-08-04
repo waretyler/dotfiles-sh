@@ -49,9 +49,9 @@ alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
 
-source_file "$cfg_zsh/aliases.local.sh"
-source_file "$cfg_zsh/$SHELL_NAME/aliases.sh"
-source_file "$cfg_zsh/$OS/aliases.sh"
+source_file "$cfg_sh/aliases.local.sh"
+source_file "$cfg_sh/$SHELL_NAME/aliases.sh"
+source_file "$cfg_sh/$OS/aliases.sh"
 
 alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"

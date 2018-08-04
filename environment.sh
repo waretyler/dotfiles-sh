@@ -1,7 +1,7 @@
 export cfg="${HOME}/.config/personal"
-export cfg_zsh="${cfg}/zsh"
+export cfg_sh="${cfg}/sh"
 
-source $cfg/zsh/utils.sh
+source $cfg_sh/utils.sh
 
 export SHELL_NAME="$(echo $SHELL | grep -o '[^/]*$')"
 export docs=~/Documents
@@ -36,6 +36,6 @@ add_path "${HOME}/.cargo/bin"
 export GOBIN="${HOME}/go/bin"
 add_path "${GOBIN}"
 
-source_file "${cfg_zsh}/environment.local.sh"
+source_file "${cfg_sh}/environment.local.sh"
 
 export PATH
