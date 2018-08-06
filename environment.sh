@@ -36,6 +36,6 @@ add_path "${HOME}/.cargo/bin"
 export GOBIN="${HOME}/go/bin"
 add_path "${GOBIN}"
 
-source_file "${cfg_sh}/environment.local.sh"
+source_file "${cfg_sh}/local/environment.sh"
 
 export PATH

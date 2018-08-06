@@ -146,7 +146,7 @@ csvcutf() {
 }
 
 
-source_file "$cfg_sh/functions.local.sh"
+source_file "$cfg_sh/local/functions.sh"
 
 calc () {
   if [ -z "$1" ]; then
