@@ -1,6 +1,4 @@
-alias g .so=". ~/.zshrc"
-alias g="git"
-
+alias g="git" 
 alias f="fzf --query"
 alias path.f='echo $path | tr " " "\n" | fzf -m --preview "ls {}"'
 
@@ -48,10 +46,6 @@ alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 #alias s?="search"
 alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
 
-
-source_file "$cfg_sh/local/aliases.sh"
-source_file "$cfg_sh/$SHELL_NAME/aliases.sh"
-source_file "$cfg_sh/$OS/aliases.sh"
 
 alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"

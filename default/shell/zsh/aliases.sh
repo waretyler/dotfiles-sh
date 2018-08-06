@@ -1,3 +1,4 @@
+alias .so=". ~/.zshrc"
 alias bindkey.ls="bindkey | fzf > /dev/null"
 
 alias -g filter.dir="grep -Ev '\\/{0,1}(\\.git|node_modules|.idea)\\/{0,1}'"

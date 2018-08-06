@@ -1,10 +1,26 @@
-source "${HOME}/.profile"
 
-source_file "$cfg_sh/options.sh" 
-source_file "$cfg_sh/aliases.sh" 
-source_file "$cfg_sh/functions.sh"
-source_file "$cfg_sh/$SHELL_NAME/init.sh"
-source_file "$cfg_sh/tools/fzf.sh"
-source_file "$cfg_sh/$SHELL_NAME/plugins.sh"
-source_file "$cfg_sh/tools/perl.sh"
-source_file "$cfg_sh/tools/ruby.sh"
+export SHELL_NAME="$(echo $SHELL | grep -o '[^/]*$')"
+export OS="$(uname | tr "[A-Z]" "[a-z]")"
+export CFG="${HOME}/.config/personal"
+export CFG_SH="${CFG}/sh"
+
+# files each
+TARGET_FILES=("utils.sh" "environment.sh" "options.sh" "aliases.sh" "functions.sh" "init.sh")
+
+if [ "${1}" = "skip" ]; then
+  TARGET_FILES=("utils.sh" "environment.sh")
+fi
+
+# allow various envionment differences: base, os & shell
+ENV_CONDS=("base" "os/$OS" "shell/$SHELL_NAME")
+
+# allow local overrides
+TARGETS=("default" "local")
+
+for TARGET_FILE in ${TARGET_FILES[@]}; do
+  for ENV_COND in ${ENV_CONDS[@]}; do
+    for TARGET in ${TARGETS[@]}; do
+      source "${CFG_SH}/${TARGET}/${ENV_COND}/${TARGET_FILE}" 2> /dev/null
+    done
+  done
+done

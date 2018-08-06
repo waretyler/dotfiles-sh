@@ -11,4 +11,10 @@ source_file() {
   fi
 }
 
-source_file "$cfg_sh/$SHELL_NAME/utils.sh"
+get_script_dir() {
+  if [ "$OS" = "darwin" ]; then
+    echo "$(dirname "$(stat -f "$1")")" 
+  else
+    echo "$(dirname "$(readlink -f "$1")")"
+  fi
+}

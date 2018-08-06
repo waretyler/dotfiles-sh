@@ -20,3 +20,6 @@ setopt INC_APPEND_HISTORY # Add immediately
 setopt HIST_SAVE_NO_DUPS # Don't save any duplicates
 setopt NO_HIST_BEEP # Don't beep
 setopt SHARE_HISTORY # Share history between session/terminals
+
+SCRIPT_DIR="$(get_script_dir "$0")"
+source "${SCRIPT_DIR}/plugins.sh"
