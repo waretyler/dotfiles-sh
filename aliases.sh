@@ -1,4 +1,4 @@
-alias -g .so=". ~/.zshrc"
+alias g .so=". ~/.zshrc"
 alias g="git"
 
 alias f="fzf --query"
@@ -58,7 +58,7 @@ alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commi
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
 alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
-alias -g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
+alias g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias v.jq="v | jq"
 
 
@@ -66,10 +66,5 @@ alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.
 alias cd.p='cd_fzf_to_dir $p'
 alias cd.f='cd_fzf_to_dir'
 
-
-alias wreado="while read -r line; do;"
-
 alias tmux.ls="tmux list-sessions"
 alias tail.sys="tail -f /var/log/syslog"
-alias filter.dir="grep -Ev '\\/{0,1}(\\.git|node_modules|.idea)\\/{0,1}'"
-alias filter.empty="grep ."

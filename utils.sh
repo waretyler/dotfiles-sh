@@ -10,3 +10,5 @@ source_file() {
     source "$1"
   fi
 }
+
+source_file "$cfg_sh/$SHELL_NAME/utils.sh"

@@ -1,8 +1,5 @@
 export cfg="${HOME}/.config/personal"
 export cfg_sh="${cfg}/sh"
-
-source $cfg_sh/utils.sh
-
 export SHELL_NAME="$(echo $SHELL | grep -o '[^/]*$')"
 export docs=~/Documents
 export p=~/Projects
@@ -19,6 +16,9 @@ if [ "$(which nvim)" ]; then
   export EDITOR=nvim
   export MANPAGER="nvim -c 'set ft=man' -"
 fi
+
+
+source $cfg_sh/utils.sh
 
 PATH=""
 add_path "/usr/local/bin"
