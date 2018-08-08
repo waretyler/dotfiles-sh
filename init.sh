@@ -1,8 +1,8 @@
 
 export SHELL_NAME="$(echo $SHELL | grep -o '[^/]*$')"
 export OS="$(uname | tr "[A-Z]" "[a-z]")"
-export CFG="${HOME}/.config/personal"
-export CFG_SH="${CFG}/sh"
+export cfg="${HOME}/.config/personal"
+export cfg_sh="${cfg}/sh"
 
 # files each
 TARGET_FILES=("utils.sh" "environment.sh" "options.sh" "aliases.sh" "functions.sh" "init.sh")
@@ -20,7 +20,7 @@ TARGETS=("default" "local")
 for TARGET_FILE in ${TARGET_FILES[@]}; do
   for ENV_COND in ${ENV_CONDS[@]}; do
     for TARGET in ${TARGETS[@]}; do
-      source "${CFG_SH}/${TARGET}/${ENV_COND}/${TARGET_FILE}" 2> /dev/null
+      source "${cfg_sh}/${TARGET}/${ENV_COND}/${TARGET_FILE}" 2> /dev/null
     done
   done
 done
