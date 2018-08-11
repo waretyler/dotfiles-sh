@@ -12,9 +12,15 @@ source_file() {
 }
 
 get_script_dir() {
-  if [ "$OS" = "darwin" ]; then
-    echo "$(dirname "$(stat -f "$1")")" 
+  if [ "$SHELL_NAME" = "bash" ]; then
+    SCRIPT_PATH="$(caller 0 | awk '{print $(NF)}')"
   else
-    echo "$(dirname "$(readlink -f "$1")")"
+    SCRIPT_PATH="$(echo "$funcstack[2]")"
+  fi
+
+  if [ "$OS" = "darwin" ]; then
+    echo "$(dirname "$(stat -f "$SCRIPT_PATH")")" 
+  else
+    echo "$(dirname "$(readlink -f "$SCRIPT_PATH")")"
   fi
 }

@@ -103,43 +103,12 @@ jcat () {
   cat $@ | jq .
 }
 
-
-fzf_choose_script() {
-    local script_to_run=$(ssel)
-    LBUFFER="${LBUFFER}${script_to_run}"
-    local ret=$?
-    zle redisplay
-    typeset -f zle-line-init >/dev/null && zle zle-line-init
-    return $ret
-}
-
-
-zle     -N    fzf_choose_script
-bindkey '\er' fzf_choose_script
-
-fzf_choose_command() {
-  local command_to_run=$((for dir in $path; do
-  ls $dir 
-  done && (alias | cut -d = -f 1)) | \
-    sort | \
-    fzf --preview '(man {} 2>/dev/null) || (cat $(which {}) 2>/dev/null) || echo "No clue about: {}"')
-    LBUFFER="${LBUFFER}${command_to_run}"
-    local ret=$?
-    zle redisplay
-    typeset -f zle-line-init >/dev/null && zle zle-line-init
-    return $ret
-}
-
-zle     -N    fzf_choose_command
-bindkey '\ee' fzf_choose_command
-
 g_fdiff () {
   if [ -z "$1" ]; then
     exit; 
   fi
   git --no-pager diff --name-status $1 | fzf -m --preview "cd $(git rev-parse --show-toplevel) && git --no-pager  diff --color=always $1 -- {-1}"
 }
-
 
 csvcutf() {
   csvcut -c "$(csvcut -n $1 | fzf -m | egrep -oh '^\s*[0-9]*' | sed -e 's/\s//g' | head -c -1 | tr '\n' ',')" $1 
@@ -155,47 +124,6 @@ calc () {
   fi
 }
 
-fzf-git-show() {
-  local out shas sha q k
-
-  if [[ -d .git ]] || git rev-parse --git-dir > /dev/null 2>&1; then
-    while out=$(
-        git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-        fzf --ansi --multi --no-sort --reverse --query="$q" \
-            --print-query \
-            --expect=ctrl-d,ctrl-l,ctrl-n \
-            --toggle-sort=\`); do
-
-      q=$(head -1 <<< "$out")
-      k=$(head -2 <<< "$out" | tail -1)
-      shas=$(sed '1,2d;s/^[^a-z0-9]*//;/^$/d' <<< "$out" | awk '{print $1}')
-
-      [[ -z "$shas" ]] && continue
-
-      case "$k" in
-        ctrl-d)
-          git diff --color=always $shas | less -R;;
-        ctrl-l)
-          git log -p --color=always ${shas}.. | less -R;;
-        ctrl-n)
-          git show --name-status --color=always ${shas} | less -R;;
-        *)
-          for sha in $shas; do
-            git show --color=always $sha | less -R
-          done
-          ;;
-      esac
-    done
-  else
-    echo -e "Not a git repo"
-  fi
-
-  zle accept-line
-}
-
-zle     -N    fzf-git-show
-bindkey '\eq' fzf-git-show
 
 
 get_dir() {
@@ -238,7 +166,7 @@ mv_up() {
 
   mkdir "$dest_dir" && \
   ls | grep "$dir_prefix" \
-    | while read -r dir; do;
+    | while read -r dir; do
       local dir_sans_prefix="$(echo $dir | sed "s/^$dir_prefix//")"
       mv "$dir" "./${dest_dir}/${dir_sans_prefix}"
     done

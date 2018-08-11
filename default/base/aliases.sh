@@ -1,13 +1,9 @@
-alias g="git" 
-alias f="fzf --query"
+alias g='git'
+alias f='fzf --query'
 alias path.f='echo $path | tr " " "\n" | fzf -m --preview "ls {}"'
 
-# LaTex
-alias watchtex="latexmk -gg -bibtex-cond -pdf -pvc"
-alias cleantex="rm *.{aux,fdb_latexmk,fls,log,pdf}"
-alias lt="tree -LC 2"
+alias filter.e='{ export t=$(mktemp) && (tee "$t" > /dev/null) } && nvim +"nnoremap q :wq<CR>" $t && { cat $t; rm $t; unset t}'
 alias less="less -r"
-
 alias patch.v="(v; echo -e '\n') | patch -p0"
 
 alias lf="ls_fzf"
@@ -52,7 +48,7 @@ alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commi
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
 alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
-alias g jq.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
+alias q.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 alias v.jq="v | jq"
 
 
