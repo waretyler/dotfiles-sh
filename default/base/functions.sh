@@ -31,14 +31,13 @@ ssh_to_tmux () {
   ssh $1 -t "tmux new -s \"\$(whoami)\" \\; set -g status-bg $2 \\; $extra || tmux attach -t \"\$(whoami)\" \\; $extra "
 }
 
-ls_dir_match() {
+find_dir() {
   local exclude=''
   if [ ! -z "$2" ]; then
-    exclude="-not -path '*$2*'"
+    exclude="-E '*$2*'"
   fi
 
-  local command="find . -type d -name $1 $exclude | sed \"s/[^/]*$//\""  
-  bash -c "$command"
+  fd -HIL "$1" -t d "$exclude" 
 }
 
 search () {
@@ -126,18 +125,36 @@ calc () {
 
 
 
-get_dir() {
-  echo "${1:-.}"
-}
-
 fzf_dir() {
-  local dir="$(get_dir $1)"
-  cd $dir && find -L . -maxdepth ${2:-7} -type d | perl -lne 'print tr:/::, " $_"' | sort -n | cut -d' ' -f2 | cut -c 3- | filter.dir | filter.empty | fzf
+  local dir="${1:-.}"
+  cd $dir && fd -HIL -d "${2:-7}" -t d | filter.dir --line-buffered | filter.empty --line-buffered | fzf
 }
 
 cd_fzf_to_dir() {
-  local dir="$(get_dir $1)"
-  cd "$dir/$(fzf_dir "$dir" "2")"
+  if [ ! -z "$1" ]; then
+    local dir="$1"
+  elif [ ! -z "$(find_project_root)" ]; then
+    local dir="$(find_project_root)"
+  else
+    local dir="."
+  fi
+
+  cd "$dir/$(fzf_dir "$dir")"
+}
+
+find_project_dirs() {
+  local dir="${1:-.}"
+  (cd $dir && fd -HIL -t d "$(get_project_pattern)" | sed 's/\/[^/]*$//' | fzf)
+}
+
+find_project_dirs_and_cd() {
+  if [ ! -z "$1" ]; then
+    local dir="$1"
+  else
+    local dir="."
+  fi
+
+  cd "$dir/$(find_project_dirs "$dir")"
 }
 
 explain () {
@@ -172,4 +189,28 @@ mv_up() {
     done
 }
 
+get_project_pattern() {
+  echo "\.git|\.svn|\.idea"
+}
 
+find_parent_dir_with() {
+  if [ -z "$1" ]; then
+    echo "Must pass a pattern" 
+    return
+  fi
+
+  local dir="";
+
+  while [ "$(pwd)" != "/" ]; do
+    if [ ! -z "$(ls -a | egrep "/(${1})$")" ]; then
+      pwd
+      break
+    else
+      cd ..
+    fi
+  done
+}
+
+find_project_root() {
+  find_parent_dir_with "$(get_project_pattern)"
+}

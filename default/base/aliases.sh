@@ -7,12 +7,11 @@ alias less="less -r"
 alias patch.v="(v; echo -e '\n') | patch -p0"
 
 alias lf="ls_fzf"
-alias ls.d="(find . -type d | sed 's/\/$//')"
-alias ls.idea='(ls_dir_match ".idea" "node_modules")'
-alias ls.git='(ls_dir_match ".git" "node_modules")'
+alias ls.d="find_dir"
+alias ls.idea='find_dir ".idea" "node_modules"'
+alias ls.git='find_dir ".git" "node_modules"'
 
-alias cdp='project_dir=$(psel) && cd $project_dir' 
-
+alias e.v='nvim `v`'
 alias e="nvim"
 alias ef='nvim -c "FZF"'
 alias er='nvim -c "History"'
@@ -22,14 +21,14 @@ alias erg="(cd $org && ef)"
 alias evim="(cd $cfg/vim && ef)"
 alias esrc="(cd $s && ef)"
 alias esnip="(cd $cfg/templates && ef)"
-alias ep='cdp && ef'
 
 alias rmf="(fzf -m --preview='ccat {}' || exit 0) | xargs rm -rf"
+alias p.root='[ ! -z "$(find_project_root)" ] && cd $(find_project_root) || echo "No project detected."'
 
-alias g.root="cd \$(git rev-parse --show-toplevel)"
+alias g.root='[ ! -z "$(find_parent_dir_with .git)" ] && cd $(find_parent_dir_with .git) || echo "Not in a git repository"'
 alias g.clean="(g.root && (git ls-files -md | xargs git reset HEAD) && (git ls-files -md | xargs git checkout --) && (git ls-files -o --exclude-standard | xargs rm -rf))"
 alias g.ppull='(psel | while read -r dir; do; cd $dir && git pull; done)'
-alias g.co='branch_to_checkout=$(git branch | fzf | cut -c 3-) && git checkout $branch_to_checkout'
+alias g.co='git branch --all | sed "s/remotes\/origin\///" | egrep -v -e "->" -e "$(git rev-parse --abbrev-ref HEAD --)" | sort | uniq | fzf | cut -c 3- | xargs -r git checkout'
 alias g.ls="git status | grep '^\\s*[a-zA-Z]*:' | awk '{print \$(NF)}'"
 alias g.fzf="g.ls | fzf -m --preview 'git diff HEAD {}'"
 alias g.next.ci="git rev-list --reverse --ancestry-path  HEAD..master | head -n 1"
@@ -38,22 +37,18 @@ alias g.af='git add `g.fzf`'
 alias gh.select_repo='github_repo=$(select_github_repositories)'
 alias gh.clone='(gh.select_repo && cd $p && git clone "https://github.com/${github_repo}")'
 alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
-
-#alias s?="search"
-alias www='($FIREFOX_PROFILE && sqlite3 "$FIREFOX_PROFILE/places.sqlite" "select host from moz_hosts order by frecency desc;" | fzf | sed "s;^;https://;" | xargs xdg-open)'
-
-
-alias lcat="ls | fzf -m --preview='cat {}'"
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
 alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
 alias q.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
+
+alias lcat="ls | fzf -m --preview='cat {}'"
 alias v.jq="v | jq"
 
-
 alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.json | fzf | awk 'BEGIN{FS=\",\"} {print \$1}' | xargs npm run"
-alias cd.p='cd_fzf_to_dir $p'
+
+alias cd.p='find_project_dirs_and_cd $p'
 alias cd.f='cd_fzf_to_dir'
 
 alias tmux.ls="tmux list-sessions"
