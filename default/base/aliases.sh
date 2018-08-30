@@ -6,10 +6,9 @@ alias filter.e='{ export t=$(mktemp) && (tee "$t" > /dev/null) } && nvim +"nnore
 alias less="less -r"
 alias patch.v="(v; echo -e '\n') | patch -p0"
 
-alias lf="ls_fzf"
-alias ls.d="find_dir"
-alias ls.idea='find_dir ".idea" "node_modules"'
-alias ls.git='find_dir ".git" "node_modules"'
+alias ls.d="fd_dir"
+alias ls.idea='fd_dir -s .idea --exclude node_modules'
+alias ls.git='fd_dir -s .git --exclude node_modules'
 
 alias e.v='nvim `v`'
 alias e="nvim"

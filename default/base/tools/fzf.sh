@@ -1,8 +1,10 @@
-[ ! -f "${HOME}/.fzf.${SHELL_NAME}" ] \
-  && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
+[ ! -d "${HOME}/.fzf" ] \
+  && git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf 
+
+[ ! -e "${HOME}/.fzf.${SHELL_NAME}" ] \
   && ~/.fzf/install
 
-source ${HOME}/.fzf.zsh
+source ${HOME}/.fzf.${SHELL_NAME}
 
 if [ ! -z "$(which ag)" ]; then
   export FZF_DEFAULT_COMMAND='(ag --hidden --ignore node_modules --ignore .git --ignore .idea --ignore .DS_Store -f -g "") 2> /dev/null'
@@ -84,7 +86,3 @@ if [ "${SHELL_NAME}" = "zsh" ]; then
   bindkey '\eq' fzf-git-show
 fi
 
-if [ "${SHELL_NAME}" = "bash" ]; then
-
-  source ~/.fzf.sh
-fi

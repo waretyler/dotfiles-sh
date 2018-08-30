@@ -27,4 +27,7 @@ add_path "${HOME}/.cargo/bin"
 export GOBIN="${HOME}/go/bin"
 add_path "${GOBIN}"
 
+export N_PREFIX="$HOME/n"; 
+add_path "$N_PREFIX/bin"
+
 export PATH

@@ -13,15 +13,6 @@ pre_search () {
   fi
 }
 
-ls_fzf () {
-  if [[ -z "$1" ]] && [[ "$1" = "--" ]]; then
-    shift
-    bash -c "ls $@"
-  else
-    bash -c "ls $@ | fzf > /dev/null"
-  fi
-}
-
 ssh_to_tmux () {
   local extra=''
   if [[ "$3" != "" ]]; then
@@ -31,14 +22,6 @@ ssh_to_tmux () {
   ssh $1 -t "tmux new -s \"\$(whoami)\" \\; set -g status-bg $2 \\; $extra || tmux attach -t \"\$(whoami)\" \\; $extra "
 }
 
-find_dir() {
-  local exclude=''
-  if [ ! -z "$2" ]; then
-    exclude="-E '*$2*'"
-  fi
-
-  fd -HIL "$1" -t d "$exclude" 
-}
 
 search () {
   ARGS="$(pre_search $@)"
@@ -123,38 +106,102 @@ calc () {
   fi
 }
 
-
-
-fzf_dir() {
-  local dir="${1:-.}"
-  cd $dir && fd -HIL -d "${2:-7}" -t d | filter.dir --line-buffered | filter.empty --line-buffered | fzf
+fdf() {
+  fd $@ | fzf -m
 }
 
-cd_fzf_to_dir() {
-  if [ ! -z "$1" ]; then
-    local dir="$1"
-  elif [ ! -z "$(find_project_root)" ]; then
-    local dir="$(find_project_root)"
-  else
-    local dir="."
+
+fd_dir() {
+  local use_rel=false
+  local use_exclude=true
+
+  while true; do
+    case "$1" in
+      -d | --base-dir)
+        local dir="$2"
+        shift 2
+        ;;
+      --depth)
+        local depth="$2"
+        shift 2
+        ;;
+      -fp | --fd-params)
+        local fd_params="$2" 
+        shift 2
+        ;;
+      -s | --search)
+        local search="$2" 
+        shift 2
+        ;;
+      --no-exclude)
+        local use_exclude=false
+        shift
+        ;;
+      --exclude)
+        local exclude="-E $2"
+        shift 2
+        ;;
+        *)
+        break
+        ;;
+    esac
+  done
+
+  if [ $use_exclude -a -z "$exclude" ]; then
+    local exclude="$(get_project_pattern --prefix -E --split) $(get_build_pattern --prefix -E --split)"
   fi
 
-  cd "$dir/$(fzf_dir "$dir")"
+  $(echo "fd -HIL -d ${depth:-7} -t d ${exclude} ${fd_params} ${search} ${dir:-.}")
+}
+
+
+fd_dirf() {
+  local use_rel=false
+  while true; do
+    case "$1" in
+      --use-relative)
+        local use_rel=true
+        shift 
+        ;;
+        *)
+        break
+        ;;
+    esac
+  done
+
+  { 
+    fd_dir $@
+    if [ $use_rel ]; then echo -e '.\n..'; fi
+  } | fzf
+}
+
+
+cdf() {
+  local use_rel=false
+  local use_exclude=true
+
+  while true; do
+    case "$1" in
+      -d | --base-dir)
+        local dir="$2"
+        shift 2
+        ;;
+        *)
+        break
+        ;;
+    esac
+  done
+
+  local target_dir=${dir:-${$(find_project_root):-.}}
+  fd_dirf -d "$target_dir" $@ | xargs -rI {} "cd $target_dir/{}" 
 }
 
 find_project_dirs() {
-  local dir="${1:-.}"
-  (cd $dir && fd -HIL -t d "$(get_project_pattern)" | sed 's/\/[^/]*$//' | fzf)
+  fd_dirf -s $(get_project_pattern --regex) 
 }
 
 find_project_dirs_and_cd() {
-  if [ ! -z "$1" ]; then
-    local dir="$1"
-  else
-    local dir="."
-  fi
-
-  cd "$dir/$(find_project_dirs "$dir")"
+  cdf $@ -s $(get_project_pattern --regex)
 }
 
 explain () {
@@ -190,8 +237,76 @@ mv_up() {
 }
 
 get_project_pattern() {
-  echo "\.git|\.svn|\.idea"
+  local project_markers=(.git .svn .idea)
+  tw_arg_format_pieces --pieces "$(echo "$project_markers[@]" | tr ' ' '|')" $@
 }
+
+get_build_pattern() {
+  local build_dirs=(node_modules)
+  tw_arg_format_pieces --pieces "$(echo "$build_dirs[@]" | tr ' ' '|')" $@
+}
+
+tw_arg_format_pieces() {
+  local is_plain=false
+  local is_regex=false
+  local is_split=false
+  local prefix=''
+  local seperator=''
+
+  while true; do
+    case "$1" in
+      --prefix)
+        local prefix="$2 "
+        shift 2
+        ;;
+      --split)
+        local is_split=true
+        shift
+        ;;
+      --regex)
+        local is_regex=true
+        shift
+        ;;
+      --pieces)
+        eval $(echo "local pieces=($(echo "$2" | tr "|" ' '))")
+        shift 2;;
+        *)
+        break
+        ;;
+    esac
+  done
+
+  if [ ${#pieces[@]} -eq 0 ]; then
+    echo "Fail"
+    return 
+  fi
+
+  if $is_split; then
+    local seperator=" $prefix"
+  elif $is_regex; then
+    local seperator="|"
+  fi
+
+  local pattern="";
+  for piece in "${pieces[@]}"; do
+    local pattern_piece="$piece"
+
+    if $is_regex; then 
+      local pattern_piece="$(echo $pattern_piece | sed 's/\./\\./g')"
+    fi
+
+    if [ "$pattern" != "" ]; then
+      local pattern_piece="${seperator}${pattern_piece}" 
+    fi
+
+    local pattern="${pattern}${pattern_piece}"
+  done
+
+  local pattern="${prefix}${pattern}"
+
+  echo $pattern;
+}
+
 
 find_parent_dir_with() {
   if [ -z "$1" ]; then
@@ -212,5 +327,6 @@ find_parent_dir_with() {
 }
 
 find_project_root() {
-  find_parent_dir_with "$(get_project_pattern)"
+  find_parent_dir_with "$(get_project_pattern --regex)"
 }
+

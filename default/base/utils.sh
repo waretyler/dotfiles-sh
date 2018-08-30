@@ -1,8 +1,14 @@
 add_path() {
   if [ -d "$1" ]; then
-    [ ! -z "$PATH" ] && PATH="${PATH}:"
-    PATH="${PATH}${1}"
+    append_to_var PATH $1
   fi
+}
+
+append_to_var() {
+  local var=$1
+  local val=$2
+  [ ! -z "$(eval echo "\$$var")" ] && eval $var="$(eval echo "\$$var"):"
+  eval $var="$(eval echo "\$$var")${val}"
 }
 
 source_file() {
