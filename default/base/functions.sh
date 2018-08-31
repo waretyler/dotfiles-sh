@@ -147,21 +147,26 @@ fd_dir() {
     esac
   done
 
-  if [ $use_exclude -a -z "$exclude" ]; then
+  if $use_exclude && [ -z "$exclude" ]; then
     local exclude="$(get_project_pattern --prefix -E --split) $(get_build_pattern --prefix -E --split)"
   fi
 
-  $(echo "fd -HIL -d ${depth:-7} -t d ${exclude} ${fd_params} ${search} ${dir:-.}")
+  eval "(cd ${dir:-.} && fd -HIL -d ${depth:-7} -t d ${exclude} ${fd_params} '(${search})')"
 }
 
 
 fd_dirf() {
   local use_rel=false
+  local fd_provider="fd_dir"
   while true; do
     case "$1" in
       --use-relative)
         local use_rel=true
         shift 
+        ;;
+      --fd-provider)
+        local fd_provider="$2"
+        shift 2
         ;;
         *)
         break
@@ -170,16 +175,13 @@ fd_dirf() {
   done
 
   { 
-    fd_dir $@
+    $fd_provider $@
     if [ $use_rel ]; then echo -e '.\n..'; fi
   } | fzf
 }
 
 
 cdf() {
-  local use_rel=false
-  local use_exclude=true
-
   while true; do
     case "$1" in
       -d | --base-dir)
@@ -193,15 +195,30 @@ cdf() {
   done
 
   local target_dir=${dir:-${$(find_project_root):-.}}
-  fd_dirf -d "$target_dir" $@ | xargs -rI {} "cd $target_dir/{}" 
+  local sel_dir=$(fd_dirf -d "$target_dir" $@) 
+  [ ! -z "$sel_dir" ] && cd $target_dir/$sel_dir 
 }
 
-find_project_dirs() {
-  fd_dirf -s $(get_project_pattern --regex) 
+# Returns all directories (recursively) that contain a 'project' 
+# 1. fd_dir looking for project markers 
+# 2. then strips the project markers (including if ther are at the current directory level) 
+# 3. sorts & dedups
+fd_project_dirs() {
+  local project_pattern="($(get_project_pattern --regex))$"
+  fd_dir $@ -s $project_pattern --exclude $(get_build_pattern) \
+    | sed 's!/[^/]*$!!' \
+    | sed "s!$(echo $project_pattern | sed 's/\([()|]\)/\\\1/g')!.!" \
+    | sort \
+    | uniq
 }
 
-find_project_dirs_and_cd() {
-  cdf $@ -s $(get_project_pattern --regex)
+fd_git_dirs() {
+  local project_pattern="(\.git)$"
+  fd_dir $@ -s $project_pattern --exclude $(get_build_pattern) \
+    | sed 's!/[^/]*$!!' \
+    | sed "s!$(echo $project_pattern | sed 's/\([()|]\)/\\\1/g')!.!" \
+    | sort \
+    | uniq
 }
 
 explain () {

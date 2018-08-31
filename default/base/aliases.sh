@@ -39,7 +39,7 @@ alias gh.view='(gh.select_repo && xdg-open "https://github.com/${github_repo}")'
 alias g.gpull="(psel | while read -r dir; do; cd \$dir && git add . && git commit && git pull && git push; done)"
 alias g.bclean='git branch -D $(git branch | fzf -m)'
 alias g.spop='stash=$(git stash list | fzf --preview "git diff \$(echo {} | egrep -oh \"^[^:]*\")" | egrep -oh "^[^:]+") && git stash pop "$stash"'
-alias g.sub_check='for dir in $(ls); do; (cd $dir && echo $dir && git status); done'
+alias g.sub_check='for dir in $(fd_git_dirs); do; (cd $dir && echo $dir && git status); done'
 alias q.cli="jq -cR '[splits(\" +\")]' | jq -s '.'"
 
 alias lcat="ls | fzf -m --preview='cat {}'"
@@ -47,8 +47,8 @@ alias v.jq="v | jq"
 
 alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.json | fzf | awk 'BEGIN{FS=\",\"} {print \$1}' | xargs npm run"
 
-alias cd.p='find_project_dirs_and_cd $p'
-alias cd.f='cd_fzf_to_dir'
+alias cd.p='cdf -d $p --fd-provider fd_project_dirs'
+alias cd.f='cdf'
 
 alias tmux.ls="tmux list-sessions"
 alias tail.sys="tail -f /var/log/syslog"
