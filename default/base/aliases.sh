@@ -48,6 +48,7 @@ alias v.jq="v | jq"
 alias npm.run="jq -r '.scripts | keys[] as \$k | \"\(\$k), \(.[\$k])\"' package.json | fzf | awk 'BEGIN{FS=\",\"} {print \$1}' | xargs npm run"
 
 alias cd.p='cdf -d $p --fd-provider fd_project_dirs'
+alias cd.cfg="cdf -d \$cfg --fd-provider fd_project_dirs --fd-params \"-E emacsds\""
 alias cd.f='cdf'
 
 alias tmux.ls="tmux list-sessions"

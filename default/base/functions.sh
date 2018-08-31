@@ -160,6 +160,10 @@ fd_dirf() {
   local fd_provider="fd_dir"
   while true; do
     case "$1" in
+      --fzf-opts)
+        local fzf_opts="$2"
+        shift 2
+        ;;
       --use-relative)
         local use_rel=true
         shift 
@@ -176,14 +180,18 @@ fd_dirf() {
 
   { 
     $fd_provider $@
-    if [ $use_rel ]; then echo -e '.\n..'; fi
-  } | fzf
+    if  $use_rel ; then echo -e '.\n..'; fi
+  } | fzf `echo $fzf_opts`
 }
 
 
 cdf() {
   while true; do
     case "$1" in
+      --fzf-opts)
+        local fzf_opts="$2"
+        shift 2
+        ;;
       -d | --base-dir)
         local dir="$2"
         shift 2
@@ -194,8 +202,9 @@ cdf() {
     esac
   done
 
+  local fzf_opts="--height=20 $fzf_opts"
   local target_dir=${dir:-${$(find_project_root):-.}}
-  local sel_dir=$(fd_dirf -d "$target_dir" $@) 
+  local sel_dir=$(fd_dirf --fzf-opts "$fzf_opts" "$@" -d "$target_dir") 
   [ ! -z "$sel_dir" ] && cd $target_dir/$sel_dir 
 }
 
